@@ -1,0 +1,30 @@
+#
+# A simple home script which allows players with the permission 'skript.home' to
+# define a home location with /sethome, delete a home with /delhome and teleport to that location whenever they want to with /home.
+#
+
+command /sethome <string>:
+	description: Sets your home
+	permission: skript.home
+	executable by: players
+	trigger:
+		set {homes::%uuid of player%::%arg-1%} to location of player
+		message "現在位置に家を登録しました"
+
+command /delhome <string>:
+	description: Deletes your home
+	permission: skript.home
+	executable by: players
+	trigger:
+		clear {homes::%uuid of player%::%arg-1%}
+		message "家の登録を消去しました"
+
+command /home <string>:
+	description: Teleports yourself to your home
+	permission: skript.home
+	executable by: players
+	trigger:
+		if {homes::%uuid of player%::%arg-1%} is not set:
+			message "家を登録していません"
+		else:
+			teleport player to {homes::%uuid of player%::%arg-1%}

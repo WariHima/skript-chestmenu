@@ -1,0 +1,41 @@
+command /menu:
+    trigger:
+        open chest inventory with 3 row named "&a&lMENU" to player
+        set {_i} to 0
+        set {_glass} to white glass pane with model data 1 
+        loop 27 times:
+            set slot {_i} of player's current inventory to {_glass}
+            set name of slot {_i} of player's current inventory to "&c&lクリック不可"
+            add 1 to {_i}
+        set slot 12 of player's current inventory to oak planks named "町ワールドに移動"
+        set slot 13 of player's current inventory to cobblestone named "資源ワールドに移動"
+        set slot 14 of player's current inventory to oak door named "家に移動"
+        set slot 15 of player's current inventory to dark oak door named "家を登録"
+        set slot 26 of player's current inventory to barrier named "閉じる"
+
+on inventory click:
+    name of event-inventory is "&a&lMENU"
+    cancel event
+    if event-item is oak planks named "町ワールドに移動":
+        if player is in world("world"):
+            message "すでに町ワールドにいます" to player
+        else:
+            execute console command "/mv tp %player% world" #この方法じゃないとうまく読み込めない
+    if event-item is cobblestone named "資源ワールドに移動":
+        if player is in world("world_sigen"):
+            message "すでに資源ワールドにいます" to player
+        else:
+            execute console command "/mv tp %player% world_sigen"       
+            message "資源ワールドに移動しました" to player
+    if event-item is oak door named "家に移動":
+        if player is in world("world"):
+            execute players command "/home 0"
+        else:
+            message "町ワールドにいる時しか家に移動できません" to player
+    if event-item is dark oak door named "家を登録":
+        if player is in world("world"):
+            execute players command "/sethome 0"
+        else:
+            message "町ワールドにいる時しか家を登録できません" to player
+    if event-item is barrier named "閉じる":
+        close player's inventory
