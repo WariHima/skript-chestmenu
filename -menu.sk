@@ -1,0 +1,46 @@
+command /menu:
+    trigger:
+        open chest inventory with 3 row named "&a&lMENU" to player
+        set {_i} to 0
+        set {_glass} to white glass pane with model data 1 
+        loop 27 times:
+            set slot {_i} of player's current inventory to {_glass}
+            set name of slot {_i} of player's current inventory to "&c&lクリック不可"
+            add 1 to {_i}
+        set slot 12 of player's current inventory to diamond with model data 1
+        set name of slot 12 of player's current inventory to "建築ワールドに移動"
+        set slot 13 of player's current inventory to diamond with model data 2
+        set name of slot 13 of player's current inventory to "資源ワールドに移動"
+        set slot 14 of player's current inventory to diamond with model data 3
+        set name of slot 14 of player's current inventory to "家に移動"
+        set slot 26 of player's current inventory to diamond with model data 4
+        set name of slot 26 of player's current inventory to "家を登録"
+        set slot 26 of player's current inventory to diamond with model data 5
+        set name of slot 26 of player's current inventory to "閉じる"
+
+on inventory click:
+    name of event-inventory is "&a&lMENU"
+    cancel event
+    if event-item is diamond named "町に移動":
+        if player is in world("world_town"):
+            message "すでに町ワールドにいます" to player
+        else:
+            teleport player to location(0, 70, 0, world "world_town")
+    if event-item is diamond named "資源ワールドに移動":
+        if player is in world("world_sigen"):
+            message "すでに資源ワールドにいます" to player
+        else:
+            teleport player to location(0, 70, 0, world "world_sigen")        
+            message "資源ワールドに移動しました" to player
+    if event-item is diamond named "家に移動":
+        if player is in world("world_town"):
+            execute players command "/home 0"
+        else:
+            message "町ワールドにいる時しか家に移動できません" to player
+    if event-item is diamond named "家を登録":
+        if player is in world("world_town"):
+            execute players command "/sethome 0"
+        else:
+            message "町ワールドにいる時しか家を登録できません" to player
+    if event-item is diamond named "閉じる":
+        close player's inventory
